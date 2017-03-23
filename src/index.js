@@ -1,4 +1,5 @@
 const
+bodyParser = require('body-parser'),
 express = require('express'),
 https = require('https'),  
 request = require('request');
