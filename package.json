@@ -1,0 +1,26 @@
+{
+  "name": "fb-messanger-bot",
+  "version": "1.0.0",
+  "description": "fb bot",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akshaykale/fb-messanger-bot.git"
+  },
+  "keywords": [
+    "nodejs",
+    "bot",
+    "ai",
+    "fb",
+    "messanger"
+  ],
+  "author": "Akshay Kale",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/akshaykale/fb-messanger-bot/issues"
+  },
+  "homepage": "https://github.com/akshaykale/fb-messanger-bot#readme"
+}
