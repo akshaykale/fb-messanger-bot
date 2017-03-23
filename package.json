@@ -20,6 +20,11 @@
   ],
   "author": "Akshay Kale",
   "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "express": "^4.13.4",
+    "request": "^2.72.0"
+  },
   "bugs": {
     "url": "https://github.com/akshaykale/fb-messanger-bot/issues"
   },
