@@ -2,21 +2,22 @@ const
 bodyParser = require('body-parser'),
 express = require('express'),
 https = require('https'),  
+logger = require("./logger.js");
 request = require('request');
 
 var app = express();
 
 app.set('port', process.env.PORT || 5000);
-app.use(bodyParser.json({ verify: verifyRequestSignature }));
-app.use(express.static('public'));
+//app.use(bodyParser.json({ verify: verifyRequestSignature }));
+//app.use(express.static('public'));
 
 app.get('/webhook', function(req, res) {
   if (req.query['hub.mode'] === 'subscribe' &&
       req.query['hub.verify_token'] === 'gota-fb-bot') {
-    console.log("Validating webhook");
+    logger.log("Validating webhook");
     res.status(200).send(req.query['hub.challenge']);
   } else {
-    console.error("Failed validation. Make sure the validation tokens match.");
+    logger.error("Failed validation. Make sure the validation tokens match.");
     res.sendStatus(403);          
   }  
 });
@@ -35,7 +36,7 @@ function verifyRequestSignature(req, res, buf) {
   if (!signature) {
     // For testing, let's log an error. In production, you should throw an 
     // error.
-    console.error("Couldn't validate the signature.");
+    logger.error("Couldn't validate the signature.");
   } else {
     var elements = signature.split('=');
     var method = elements[0];
