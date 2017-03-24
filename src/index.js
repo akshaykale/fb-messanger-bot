@@ -105,35 +105,20 @@ app.post('/webhook', function (req, res) {
 });
 
 
-function sendMessageToWatsonAndGetResponseText(message_text) {
-  var text_from_watson = 'fail to get reply.';
-  logger.log('########Message from user: '.message_text);
+function replyByWatson(senderID, messageText, context) {
   conversation.message({
-    input: { text: message_text },
-    context: watson_resp == null ? null : watson_resp.context,
+    input: { text: messageText },
+    context: context,
   }, (err, response) => {
     if (err) {
-      logger.error('Error in watson response: '.err); // something went wrong
+      logger.error('Error in watson response: ' + err); // something went wrong
       return;
     }
-    watson_resp = response;
-    
-    logger.log(JSON.stringify(response.context, null, 2));
-    // Display the output from dialog, if any.
     if (response.output.text.length != 0) {
       logger.log(response.output.text[0]);
+      sendTextMessage(senderID, response.output.text[0], JSON.stringify(response.context));
     }
-
-    // Prompt for the next round of input.
-    //say(viber_resp, response.output.text[0]);
-    logger.log('yuyu: '.response.output.text[0])
-    text_from_watson = response.output.text[0];
-
-    sendTextMessage(senderID,respFromWatson);
-
   });
-  
-  //return text_from_watson;
 }
 
 
@@ -204,28 +189,18 @@ function receivedMessage(event) {
   var messageAttachments = message.attachments;
   var quickReply = message.quick_reply;
 
-  /*if (isEcho) {
-    // Just logging message echoes to console
-    logger.log("Received echo for message %s and app %d with metadata %s",
-      messageId, appId, metadata);
-    return;
-  } else if (quickReply) {
-    var quickReplyPayload = quickReply.payload;
-    console.log("Quick reply for message %s with payload %s",
-      messageId, quickReplyPayload);
-
-    sendTextMessage(senderID, "Quick reply tapped");
-    return;
-  }*/
 
   if (messageText) {
+
+    replyByWatson(senderID, messageText, watsonContext);
+
     //var respFromWatson = sendMessageToWatsonAndGetResponseText(senderID, messageText);
     
     // If we receive a text message, check to see if it matches any special
     // keywords and send back the corresponding example. Otherwise, just echo
     // the text we received.
 
-    switch (messageText) {
+    /*switch (messageText) {
       case 'image':
         sendImageMessage(senderID);
         break;
@@ -280,36 +255,8 @@ function receivedMessage(event) {
 
       default: {
 
-        conversation.message({
-          input: { text: messageText },
-          context: watsonContext,
-        }, (err, response) => {
-          if (err) {
-            logger.error('Error in watson response: '+err); // something went wrong
-            return;
-          }
-          //watson_resp = response;
-          //logger.log('@@@@@@@ Context: '+JSON.stringify(watson_resp == null?'null': watson_resp.context));
-
-          //logger.log(JSON.stringify(response.context, null, 2));
-          // Display the output from dialog, if any.
-          if (response.output.text.length != 0) {
-            logger.log(response.output.text[0]);
-            sendTextMessage(senderID, response.output.text[0], JSON.stringify(response.context));
-          }
-
-          // Prompt for the next round of input.
-          //say(viber_resp, response.output.text[0]);
-          //logger.log(JSON.stringify(response));
-          messageText = response.output.text[0];
-
-          //sendTextMessage(senderID, respFromWatson);
-
-        });
-        logger.log('###############'+messageText);
-        //sendTextMessage(senderID, messageText);
       }
-    }
+    }*/
   } else if (messageAttachments) {
     sendTextMessage(senderID, "Message with attachment received");
   }
