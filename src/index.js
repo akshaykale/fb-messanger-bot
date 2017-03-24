@@ -19,7 +19,7 @@ var conversation = new ConversationV1({
   version_date: '2016-07-11'
 });
 
-var watson_resp;
+var watson_resp = null;
 
 // App Secret can be retrieved from the App Dashboard
 const APP_SECRET = process.env.MESSENGER_APP_SECRET;
@@ -196,7 +196,7 @@ function receivedMessage(event) {
   //var isEcho = message.is_echo;
   //var messageId = message.mid;
   //var appId = message.app_id;
-  //var metadata = message.metadata;
+  var metadata = message.metadata; //metadeta is context
 
   // You may get a text or attachment but not both
   var messageText = message.text;
@@ -282,7 +282,7 @@ function receivedMessage(event) {
 
         conversation.message({
           input: { text: messageText },
-          context: watson_resp == null ? null : watson_resp.context,
+          context: metadata,
         }, (err, response) => {
           if (err) {
             logger.error('Error in watson response: '+err); // something went wrong
@@ -295,7 +295,7 @@ function receivedMessage(event) {
           // Display the output from dialog, if any.
           if (response.output.text.length != 0) {
             logger.log(response.output.text[0]);
-            sendTextMessage(senderID, response.output.text[0]);
+            sendTextMessage(senderID, response.output.text[0], response.context);
           }
 
           // Prompt for the next round of input.
@@ -518,14 +518,14 @@ function sendFileMessage(recipientId) {
  * Send a text message using the Send API.
  *
  */
-function sendTextMessage(recipientId, messageText) {
+function sendTextMessage(recipientId, messageText, context = null) {
   var messageData = {
     recipient: {
       id: recipientId
     },
     message: {
       text: messageText,
-      metadata: "DEVELOPER_DEFINED_METADATA"
+      metadata: context
     }
   };
 
