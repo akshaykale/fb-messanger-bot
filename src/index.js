@@ -182,7 +182,7 @@ function receivedAuthentication(event) {
  */
 function receivedMessage(event) {
 
-  logger.log('#### Context: '+JSON.stringify(watson_resp.context == null?'null': watson_resp.context));
+  logger.log('#### Context: '+JSON.stringify(watson_resp == null?'null': watson_resp.context));
 
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
@@ -289,7 +289,7 @@ function receivedMessage(event) {
             return;
           }
           watson_resp = response;
-          logger.log('@@@@@@@ Context: '+JSON.stringify(watson_resp.context == null?'null': watson_resp.context));
+          logger.log('@@@@@@@ Context: '+JSON.stringify(watson_resp == null?'null': watson_resp.context));
 
           //logger.log(JSON.stringify(response.context, null, 2));
           // Display the output from dialog, if any.
