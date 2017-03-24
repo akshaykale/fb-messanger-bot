@@ -194,7 +194,7 @@ function receivedMessage(event) {
   if (messageText) {
 
     replyByWatson(senderID, messageText, watsonContext);
-
+    return;
     //var respFromWatson = sendMessageToWatsonAndGetResponseText(senderID, messageText);
     
     // If we receive a text message, check to see if it matches any special
