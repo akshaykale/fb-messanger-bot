@@ -5,7 +5,7 @@ bodyParser = require('body-parser'),
 express = require('express'),
 https = require('https'),  
 crypto = require('crypto'),
-logger = require("./logger.js");
+logger = require("./logger.js"),
 request = require('request');
 
 var app = express();
