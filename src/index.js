@@ -182,7 +182,7 @@ function receivedAuthentication(event) {
  */
 function receivedMessage(event) {
 
-  logger.log('#### Context: '+JSON.stringify(watson_resp == null?'null': watson_resp.context));
+  //logger.log('#### Context: '+JSON.stringify(watson_resp == null?'null': watson_resp.context));
 
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
@@ -197,6 +197,7 @@ function receivedMessage(event) {
   //var messageId = message.mid;
   //var appId = message.app_id;
   var metadata = message.metadata; //metadeta is context
+  logger.log('!!!!!'+metadata);
   var watsonContext = JSON.parse(metadata);
   // You may get a text or attachment but not both
   var messageText = message.text;
