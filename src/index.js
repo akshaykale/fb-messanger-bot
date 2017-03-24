@@ -1,21 +1,21 @@
 'use strict';
 
 const
-bodyParser = require('body-parser'),
-express = require('express'),
-https = require('https'),  
-crypto = require('crypto'),
-logger = require("./logger.js"),
-request = require('request');
+  bodyParser = require('body-parser'),
+  express = require('express'),
+  https = require('https'),
+  crypto = require('crypto'),
+  logger = require("./logger.js"),
+  request = require('request');
 var ConversationV1 = require('watson-developer-cloud/conversation/v1');
 
 var app = express();
 
 /*Conversation object*/
 var conversation = new ConversationV1({
-  username: process.env.CONVERSATION_USERNAME, 
-  password: process.env.CONVERSATION_PASSWORD, 
-  path: { workspace_id: process.env.CONVERSATION_WORKSPACE_ID }, 
+  username: process.env.CONVERSATION_USERNAME,
+  password: process.env.CONVERSATION_PASSWORD,
+  path: { workspace_id: process.env.CONVERSATION_WORKSPACE_ID },
   version_date: '2016-07-11'
 });
 
@@ -46,15 +46,15 @@ app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
 //GET request just to verify webhook url from fb dashbpard/webhook
-app.get('/webhook', function(req, res) {
+app.get('/webhook', function (req, res) {
   if (req.query['hub.mode'] === 'subscribe' &&
-      req.query['hub.verify_token'] === 'gota-fb-bot') {
+    req.query['hub.verify_token'] === 'gota-fb-bot') {
     logger.log("Validating webhook");
     res.status(200).send(req.query['hub.challenge']);
   } else {
     logger.error("Failed validation. Make sure the validation tokens match.");
-    res.sendStatus(403);          
-  }  
+    res.sendStatus(403);
+  }
 });
 
 /*
@@ -77,9 +77,19 @@ app.post('/webhook', function (req, res) {
 
       // Iterate over each messaging event
       pageEntry.messaging.forEach(function (messagingEvent) {
-        if (messagingEvent.message) {
+        if (messagingEvent.optin) {
+          receivedAuthentication(messagingEvent);
+        } else if (messagingEvent.message) {
           receivedMessage(messagingEvent);
-        }else {
+        } else if (messagingEvent.delivery) {
+          receivedDeliveryConfirmation(messagingEvent);
+        } else if (messagingEvent.postback) {
+          receivedPostback(messagingEvent);
+        } else if (messagingEvent.read) {
+          receivedMessageRead(messagingEvent);
+        } else if (messagingEvent.account_linking) {
+          receivedAccountLink(messagingEvent);
+        } else {
           logger.log("Webhook received unknown messagingEvent: ", messagingEvent);
         }
       });
@@ -166,26 +176,39 @@ function receivedMessage(event) {
 
   //logger.log("Received message for user %d and page %d at %d with message:",
   //  senderID, recipientID, timeOfMessage);
-  logger.log('Message from user FB:  '+JSON.stringify(message));
+  logger.log('Message from user FB:  ' + JSON.stringify(message));
 
-  //var isEcho = message.is_echo;
-  //var messageId = message.mid;
-  //var appId = message.app_id;
-  var metadata = message.metadata == null ? '{}': message.metadata; //metadeta is context
-  logger.log('!!!!!'+metadata);
+  var isEcho = message.is_echo;
+  var messageId = message.mid;
+  var appId = message.app_id;
+  var metadata = message.metadata == null ? '{}' : message.metadata; //metadeta is context
+  logger.log('!!!!!' + metadata);
   var watsonContext = JSON.parse(metadata);
   // You may get a text or attachment but not both
   var messageText = message.text;
   var messageAttachments = message.attachments;
   var quickReply = message.quick_reply;
 
+  if (isEcho) {
+    // Just logging message echoes to console
+    logger.log("Received echo for message %s and app %d with metadata %s",
+      messageId, appId, metadata);
+    return;
+  } else if (quickReply) {
+    var quickReplyPayload = quickReply.payload;
+    console.log("Quick reply for message %s with payload %s",
+      messageId, quickReplyPayload);
+
+    sendTextMessage(senderID, "Quick reply tapped");
+    return;
+  }
 
   if (messageText) {
 
     replyByWatson(senderID, messageText, watsonContext);
-    return;
+    //return;
     //var respFromWatson = sendMessageToWatsonAndGetResponseText(senderID, messageText);
-    
+
     // If we receive a text message, check to see if it matches any special
     // keywords and send back the corresponding example. Otherwise, just echo
     // the text we received.
@@ -456,7 +479,7 @@ function sendFileMessage(recipientId) {
  *
  */
 function sendTextMessage(recipientId, messageText, context = '{}') {
-  logger.log('send Context: '+ context);
+  logger.log('send Context: ' + context);
   var messageData = {
     recipient: {
       id: recipientId
@@ -804,6 +827,6 @@ logger.log('test');
 // Start server
 // Webhooks must be available via SSL with a certificate signed by a valid 
 // certificate authority.
-app.listen(app.get('port'), function() {
+app.listen(app.get('port'), function () {
   console.log('Node app is running on port', app.get('port'));
 });
