@@ -220,7 +220,7 @@ function receivedMessage(event) {
     // If we receive a text message, check to see if it matches any special
     // keywords and send back the corresponding example. Otherwise, just echo
     // the text we received.
-    logger.log('#######msg'.messageText);
+    logger.log('#######msg'+messageText);
 
     switch (messageText) {
       case 'image':
@@ -282,7 +282,7 @@ function receivedMessage(event) {
           context: watson_resp == null ? null : watson_resp.context,
         }, (err, response) => {
           if (err) {
-            logger.error('Error in watson response: '.err); // something went wrong
+            logger.error('Error in watson response: '+err); // something went wrong
             return;
           }
           watson_resp = response;
@@ -301,7 +301,7 @@ function receivedMessage(event) {
           //sendTextMessage(senderID, respFromWatson);
 
         });
-
+        logger.log('###############'+messageText);
         sendTextMessage(senderID, messageText);
       }
     }
