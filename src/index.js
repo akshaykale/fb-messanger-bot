@@ -77,26 +77,12 @@ app.post('/webhook', function (req, res) {
 
       // Iterate over each messaging event
       pageEntry.messaging.forEach(function (messagingEvent) {
-        /*if (messagingEvent.optin) {
-          receivedAuthentication(messagingEvent);
-        } else*/ 
         if (messagingEvent.message) {
-          //processMessageFromFB(messagingEvent);
           receivedMessage(messagingEvent);
-          
-        }/* else if (messagingEvent.delivery) {
-          receivedDeliveryConfirmation(messagingEvent);
-        } else if (messagingEvent.postback) {
-          receivedPostback(messagingEvent);
-        } else if (messagingEvent.read) {
-          receivedMessageRead(messagingEvent);
-        } else if (messagingEvent.account_linking) {
-          receivedAccountLink(messagingEvent);
-        } */else {
+        }else {
           logger.log("Webhook received unknown messagingEvent: ", messagingEvent);
         }
-        break;
-      });break;
+      });
     });
 
     // Assume all went well.
@@ -120,6 +106,7 @@ function replyByWatson(senderID, messageText, context) {
     if (response.output.text.length != 0) {
       logger.log(response.output.text[0]);
       sendTextMessage(senderID, response.output.text[0], JSON.stringify(response.context));
+      return;
     }
   });
 }
