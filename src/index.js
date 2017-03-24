@@ -181,6 +181,9 @@ function receivedAuthentication(event) {
  * 
  */
 function receivedMessage(event) {
+
+  logger.log('#### Context: '+JSON.stringify(watson_resp.context));
+
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
   var timeOfMessage = event.timestamp;
