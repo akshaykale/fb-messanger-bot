@@ -12,41 +12,31 @@ var app = express();
 
 
 // App Secret can be retrieved from the App Dashboard
-const APP_SECRET = (process.env.MESSENGER_APP_SECRET) ? 
-  process.env.MESSENGER_APP_SECRET :
-  config.get('appSecret');
+const APP_SECRET = process.env.MESSENGER_APP_SECRET;
 
 // Arbitrary value used to validate a webhook
-const VALIDATION_TOKEN = (process.env.MESSENGER_VALIDATION_TOKEN) ?
-  (process.env.MESSENGER_VALIDATION_TOKEN) :
-  config.get('validationToken');
+const VALIDATION_TOKEN = process.env.MESSENGER_VALIDATION_TOKEN;
 
 // Generate a page access token for your page from the App Dashboard
-const PAGE_ACCESS_TOKEN = (process.env.MESSENGER_PAGE_ACCESS_TOKEN) ?
-  (process.env.MESSENGER_PAGE_ACCESS_TOKEN) :
-  config.get('pageAccessToken');
+const PAGE_ACCESS_TOKEN = process.env.MESSENGER_PAGE_ACCESS_TOKEN;
 
 // URL where the app is running (include protocol). Used to point to scripts and 
 // assets located at this address. 
-const SERVER_URL = (process.env.SERVER_URL) ?
-  (process.env.SERVER_URL) :
-  config.get('serverURL');
+const SERVER_URL = process.env.SERVER_URL;
 
 if (!(APP_SECRET && VALIDATION_TOKEN && PAGE_ACCESS_TOKEN && SERVER_URL)) {
-  console.error("Missing config values");
+  logger.error("Missing config values");
   process.exit(1);
-}
+}s
 
-
-
+//app values
 app.set('port', process.env.PORT || 5000);
 app.use(bodyParser.json({ verify: verifyRequestSignature }));
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
-
+//GET request just to verify webhook url from fb dashbpard/webhook
 app.get('/webhook', function(req, res) {
-  logger.log('yoo11');
   if (req.query['hub.mode'] === 'subscribe' &&
       req.query['hub.verify_token'] === 'gota-fb-bot') {
     logger.log("Validating webhook");
@@ -57,10 +47,6 @@ app.get('/webhook', function(req, res) {
   }  
 });
 
-
-
-
-
 /*
  * All callbacks for Messenger are POST-ed. They will be sent to the same
  * webhook. Be sure to subscribe your app to your page to receive callbacks
@@ -69,7 +55,6 @@ app.get('/webhook', function(req, res) {
  *
  */
 app.post('/webhook', function (req, res) {
-  logger.log('yoo22');
   var data = req.body;
   logger.log(data.object);
   // Make sure this is a page subscription
