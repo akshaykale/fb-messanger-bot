@@ -6,8 +6,8 @@ express = require('express'),
 https = require('https'),  
 crypto = require('crypto'),
 logger = require("./logger.js"),
-request = require('request'),
-ConversationV1 = require('watson-developer-cloud/conversation/v1');
+request = require('request');
+var ConversationV1 = require('watson-developer-cloud/conversation/v1');
 
 var app = express();
 
@@ -16,7 +16,7 @@ var conversation = new ConversationV1({
   username: process.env.CONVERSATION_USERNAME, 
   password: process.env.CONVERSATION_PASSWORD, 
   path: { workspace_id: process.env.CONVERSATION_WORKSPACE_ID }, 
-  version_date: '2017-03-24'
+  version_date: '2016-07-11'
 });
 
 var watson_resp;
