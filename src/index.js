@@ -189,18 +189,15 @@ function receivedMessage(event) {
   var timeOfMessage = event.timestamp;
   var message = event.message;
 
-  logger.log("Received message for user %d and page %d at %d with message:",
-    senderID, recipientID, timeOfMessage);
-  logger.log(JSON.stringify(message));
+  //logger.log("Received message for user %d and page %d at %d with message:",
+  //  senderID, recipientID, timeOfMessage);
+  logger.log('Message from user FB:  '+JSON.stringify(message));
 
   //var isEcho = message.is_echo;
   //var messageId = message.mid;
   //var appId = message.app_id;
-  var metadata = message.metadata == null ? '{}':message.metadata; //metadeta is context
+  var metadata = message.metadata == null ? '{}': message.metadata; //metadeta is context
   logger.log('!!!!!'+metadata);
-
-
-
   var watsonContext = JSON.parse(metadata);
   // You may get a text or attachment but not both
   var messageText = message.text;
@@ -227,7 +224,6 @@ function receivedMessage(event) {
     // If we receive a text message, check to see if it matches any special
     // keywords and send back the corresponding example. Otherwise, just echo
     // the text we received.
-    logger.log('#######msg'+messageText);
 
     switch (messageText) {
       case 'image':
@@ -292,8 +288,8 @@ function receivedMessage(event) {
             logger.error('Error in watson response: '+err); // something went wrong
             return;
           }
-          watson_resp = response;
-          logger.log('@@@@@@@ Context: '+JSON.stringify(watson_resp == null?'null': watson_resp.context));
+          //watson_resp = response;
+          //logger.log('@@@@@@@ Context: '+JSON.stringify(watson_resp == null?'null': watson_resp.context));
 
           //logger.log(JSON.stringify(response.context, null, 2));
           // Display the output from dialog, if any.
@@ -304,7 +300,7 @@ function receivedMessage(event) {
 
           // Prompt for the next round of input.
           //say(viber_resp, response.output.text[0]);
-          logger.log(JSON.stringify(response));
+          //logger.log(JSON.stringify(response));
           messageText = response.output.text[0];
 
           //sendTextMessage(senderID, respFromWatson);
@@ -522,7 +518,8 @@ function sendFileMessage(recipientId) {
  * Send a text message using the Send API.
  *
  */
-function sendTextMessage(recipientId, messageText, context = '') {
+function sendTextMessage(recipientId, messageText, context = '{}') {
+  logger.log('send Context: '+ context);
   var messageData = {
     recipient: {
       id: recipientId
