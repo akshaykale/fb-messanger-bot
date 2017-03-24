@@ -6,10 +6,20 @@ express = require('express'),
 https = require('https'),  
 crypto = require('crypto'),
 logger = require("./logger.js"),
-request = require('request');
+request = require('request'),
+ConversationV1 = require('watson-developer-cloud/conversation/v1');
 
 var app = express();
 
+/*Conversation object*/
+var conversation = new ConversationV1({
+  username: process.env.CONVERSATION_USERNAME, 
+  password: process.env.CONVERSATION_PASSWORD, 
+  path: { workspace_id: process.env.CONVERSATION_WORKSPACE_ID }, 
+  version_date: '2017-03-24'
+});
+
+var watson_resp;
 
 // App Secret can be retrieved from the App Dashboard
 const APP_SECRET = process.env.MESSENGER_APP_SECRET;
@@ -70,6 +80,7 @@ app.post('/webhook', function (req, res) {
         if (messagingEvent.optin) {
           receivedAuthentication(messagingEvent);
         } else if (messagingEvent.message) {
+          //processMessageFromFB(messagingEvent);
           receivedMessage(messagingEvent);
         } else if (messagingEvent.delivery) {
           receivedDeliveryConfirmation(messagingEvent);
@@ -94,6 +105,29 @@ app.post('/webhook', function (req, res) {
 });
 
 
+function sendMessageToWatsonAndGetResponseText(message_text) {
+
+  conversation.message({
+    input: { text: message_text },
+    context: watson_resp == null ? null : watson_resp.context,
+  }, (err, response) => {
+    if (err) {
+      logger.error(err); // something went wrong
+      return;
+    }
+    watson_resp = response;
+    
+    logger.log(JSON.stringify(response.context, null, 2));
+    // Display the output from dialog, if any.
+    if (response.output.text.length != 0) {
+      logger.log(response.output.text[0]);
+    }
+
+    // Prompt for the next round of input.
+    //say(viber_resp, response.output.text[0]);
+    return response.output.text[0];
+  });
+}
 
 
 /*
@@ -174,11 +208,12 @@ function receivedMessage(event) {
   }
 
   if (messageText) {
-
+    var respFromWatson = sendMessageToWatsonAndGetResponseText(messageText);
+    sendTextMessage(senderID,respFromWatson);
     // If we receive a text message, check to see if it matches any special
     // keywords and send back the corresponding example. Otherwise, just echo
     // the text we received.
-    switch (messageText) {
+    /*switch (messageText) {
       case 'image':
         sendImageMessage(senderID);
         break;
@@ -233,7 +268,7 @@ function receivedMessage(event) {
 
       default:
         sendTextMessage(senderID, messageText);
-    }
+    }*/
   } else if (messageAttachments) {
     sendTextMessage(senderID, "Message with attachment received");
   }
@@ -782,6 +817,9 @@ function verifyRequestSignature(req, res, buf) {
     }
   }
 }
+
+
+
 logger.log('test');
 
 // Start server
