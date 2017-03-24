@@ -196,8 +196,11 @@ function receivedMessage(event) {
   //var isEcho = message.is_echo;
   //var messageId = message.mid;
   //var appId = message.app_id;
-  var metadata = message.metadata; //metadeta is context
+  var metadata = message.metadata == null ? '':message.metadata; //metadeta is context
   logger.log('!!!!!'+metadata);
+
+
+
   var watsonContext = JSON.parse(metadata);
   // You may get a text or attachment but not both
   var messageText = message.text;
