@@ -19,7 +19,7 @@ var conversation = new ConversationV1({
   version_date: '2016-07-11'
 });
 
-var watson_resp = null;
+var watson_context = null;
 
 // App Secret can be retrieved from the App Dashboard
 const APP_SECRET = process.env.MESSENGER_APP_SECRET;
@@ -104,19 +104,18 @@ app.post('/webhook', function (req, res) {
 });
 
 
-function replyByWatson(senderID, messageText, context) {
+function replyByWatson(senderID, messageText) {
   conversation.message({
     input: { text: messageText },
-    context: context,
+    context: watson_context,
   }, (err, response) => {
     if (err) {
       logger.error('Error in watson response: ' + err); // something went wrong
-      return;
     }
+    watson_context = response.context;
     if (response.output.text.length != 0) {
       logger.log(response.output.text[0]);
-      sendTextMessage(senderID, response.output.text[0], JSON.stringify(response.context));
-      return;
+      sendTextMessage(senderID, response.output.text[0]);
     }
   });
 }
@@ -181,9 +180,9 @@ function receivedMessage(event) {
   var isEcho = message.is_echo;
   var messageId = message.mid;
   var appId = message.app_id;
-  var metadata = message.metadata == null ? '{}' : message.metadata; //metadeta is context
-  logger.log('!!!!!' + metadata);
-  var watsonContext = JSON.parse(metadata);
+  var metadata = message.metadata ;//== null ? '{}' : message.metadata; //metadeta is context
+  //logger.log('!!!!!' + metadata);
+  //var watsonContext = JSON.parse(metadata);
   // You may get a text or attachment but not both
   var messageText = message.text;
   var messageAttachments = message.attachments;
@@ -205,7 +204,7 @@ function receivedMessage(event) {
 
   if (messageText) {
 
-    replyByWatson(senderID, messageText, watsonContext);
+    replyByWatson(senderID, messageText);
     //return;
     //var respFromWatson = sendMessageToWatsonAndGetResponseText(senderID, messageText);
 
@@ -478,15 +477,14 @@ function sendFileMessage(recipientId) {
  * Send a text message using the Send API.
  *
  */
-function sendTextMessage(recipientId, messageText, context = '{}') {
-  logger.log('send Context: ' + context);
+function sendTextMessage(recipientId, messageText) {
   var messageData = {
     recipient: {
       id: recipientId
     },
     message: {
       text: messageText,
-      metadata: context
+      metadata: "context"
     }
   };
 
