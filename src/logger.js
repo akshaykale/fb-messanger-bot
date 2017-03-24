@@ -17,6 +17,6 @@ function createLogger() {
 exports.log = function(log_text){
 
     var logger = createLogger();
-    logger.debug(log_text);
+    logger.debug(log_text == null ? 'null' : log_text);
 
 }
