@@ -1,7 +1,10 @@
+'use strict';
+
 const
 bodyParser = require('body-parser'),
 express = require('express'),
 https = require('https'),  
+crypto = require('crypto'),
 logger = require("./logger.js");
 request = require('request');
 
@@ -37,8 +40,10 @@ if (!(APP_SECRET && VALIDATION_TOKEN && PAGE_ACCESS_TOKEN && SERVER_URL)) {
 
 
 app.set('port', process.env.PORT || 5000);
-//app.use(bodyParser.json({ verify: verifyRequestSignature }));
-//app.use(express.static('public'));
+app.use(bodyParser.json({ verify: verifyRequestSignature }));
+app.use(express.static('public'));
+app.set('view engine', 'ejs');
+
 
 app.get('/webhook', function(req, res) {
   if (req.query['hub.mode'] === 'subscribe' &&
@@ -64,7 +69,7 @@ app.get('/webhook', function(req, res) {
  */
 app.post('/webhook', function (req, res) {
   var data = req.body;
-
+  logger.log(data.object);
   // Make sure this is a page subscription
   if (data.object == 'page') {
     // Iterate over each entry
@@ -747,10 +752,10 @@ function callSendAPI(messageData) {
       var messageId = body.message_id;
 
       if (messageId) {
-        console.log("Successfully sent message with id %s to recipient %s", 
+        logger.log("Successfully sent message with id %s to recipient %s", 
           messageId, recipientId);
       } else {
-      console.log("Successfully called Send API for recipient %s", 
+      logger.log("Successfully called Send API for recipient %s", 
         recipientId);
       }
     } else {
