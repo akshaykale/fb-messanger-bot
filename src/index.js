@@ -83,7 +83,7 @@ app.post('/webhook', function (req, res) {
         if (messagingEvent.message) {
           //processMessageFromFB(messagingEvent);
           receivedMessage(messagingEvent);
-          break;
+          
         }/* else if (messagingEvent.delivery) {
           receivedDeliveryConfirmation(messagingEvent);
         } else if (messagingEvent.postback) {
@@ -95,6 +95,7 @@ app.post('/webhook', function (req, res) {
         } */else {
           logger.log("Webhook received unknown messagingEvent: ", messagingEvent);
         }
+        break;
       });break;
     });
 
