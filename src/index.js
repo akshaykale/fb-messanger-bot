@@ -295,7 +295,7 @@ function receivedMessage(event) {
 
           // Prompt for the next round of input.
           //say(viber_resp, response.output.text[0]);
-          logger.log('yuyu: '.response.output.text[0])
+          logger.log(JSON.stringify(response));
           messageText = response.output.text[0];
 
           //sendTextMessage(senderID, respFromWatson);
