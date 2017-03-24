@@ -105,9 +105,9 @@ app.post('/webhook', function (req, res) {
 });
 
 
-function sendMessageToWatsonAndGetResponseText(message_text) {
+function sendMessageToWatsonAndGetResponseText(senderID, message_text) {
   var text_from_watson = 'fail to get reply.';
-  logger.log('Message from user: '.message_text);
+  logger.log('########Message from user: '.message_text);
   conversation.message({
     input: { text: message_text },
     context: watson_resp == null ? null : watson_resp.context,
