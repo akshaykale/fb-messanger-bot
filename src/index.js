@@ -107,13 +107,13 @@ app.post('/webhook', function (req, res) {
 
 function sendMessageToWatsonAndGetResponseText(message_text) {
   var text_from_watson = 'fail to get reply.';
-  //logger.log('Message from user: '.message_text);
+  logger.log('Message from user: '.message_text);
   conversation.message({
     input: { text: message_text },
     context: watson_resp == null ? null : watson_resp.context,
   }, (err, response) => {
     if (err) {
-      logger.error(err); // something went wrong
+      logger.error('Error in watson response: '.err); // something went wrong
       return;
     }
     watson_resp = response;
@@ -126,9 +126,14 @@ function sendMessageToWatsonAndGetResponseText(message_text) {
 
     // Prompt for the next round of input.
     //say(viber_resp, response.output.text[0]);
+    logger.log('yuyu: '.response.output.text[0])
     text_from_watson = response.output.text[0];
+
+    sendTextMessage(senderID,respFromWatson);
+
   });
-  return text_from_watson;
+  
+  //return text_from_watson;
 }
 
 
@@ -210,8 +215,8 @@ function receivedMessage(event) {
   }*/
 
   if (messageText) {
-    var respFromWatson = sendMessageToWatsonAndGetResponseText(messageText);
-    sendTextMessage(senderID,respFromWatson);
+    var respFromWatson = sendMessageToWatsonAndGetResponseText(senderID, messageText);
+    
     // If we receive a text message, check to see if it matches any special
     // keywords and send back the corresponding example. Otherwise, just echo
     // the text we received.
