@@ -193,7 +193,7 @@ function receivedMessage(event) {
   var messageAttachments = message.attachments;
   var quickReply = message.quick_reply;
 
-  if (isEcho) {
+  /*if (isEcho) {
     // Just logging message echoes to console
     logger.log("Received echo for message %s and app %d with metadata %s",
       messageId, appId, metadata);
@@ -205,7 +205,7 @@ function receivedMessage(event) {
 
     sendTextMessage(senderID, "Quick reply tapped");
     return;
-  }
+  }*/
 
   if (messageText) {
     var respFromWatson = sendMessageToWatsonAndGetResponseText(messageText);
