@@ -196,7 +196,7 @@ function receivedMessage(event) {
   //var isEcho = message.is_echo;
   //var messageId = message.mid;
   //var appId = message.app_id;
-  var metadata = message.metadata == null ? '':message.metadata; //metadeta is context
+  var metadata = message.metadata == null ? '{}':message.metadata; //metadeta is context
   logger.log('!!!!!'+metadata);
 
 
