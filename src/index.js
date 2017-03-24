@@ -197,7 +197,7 @@ function receivedMessage(event) {
   //var messageId = message.mid;
   //var appId = message.app_id;
   var metadata = message.metadata; //metadeta is context
-
+  var watsonContext = JSON.parse(metadata);
   // You may get a text or attachment but not both
   var messageText = message.text;
   var messageAttachments = message.attachments;
@@ -282,7 +282,7 @@ function receivedMessage(event) {
 
         conversation.message({
           input: { text: messageText },
-          context: metadata,
+          context: watsonContext,
         }, (err, response) => {
           if (err) {
             logger.error('Error in watson response: '+err); // something went wrong
@@ -295,7 +295,7 @@ function receivedMessage(event) {
           // Display the output from dialog, if any.
           if (response.output.text.length != 0) {
             logger.log(response.output.text[0]);
-            sendTextMessage(senderID, response.output.text[0], response.context);
+            sendTextMessage(senderID, response.output.text[0], JSON.stringify(response.context));
           }
 
           // Prompt for the next round of input.
