@@ -291,6 +291,7 @@ function receivedMessage(event) {
           // Display the output from dialog, if any.
           if (response.output.text.length != 0) {
             logger.log(response.output.text[0]);
+            sendTextMessage(senderID, response.output.text[0]);
           }
 
           // Prompt for the next round of input.
@@ -302,7 +303,7 @@ function receivedMessage(event) {
 
         });
         logger.log('###############'+messageText);
-        sendTextMessage(senderID, messageText);
+        //sendTextMessage(senderID, messageText);
       }
     }
   } else if (messageAttachments) {
