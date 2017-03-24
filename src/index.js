@@ -518,7 +518,7 @@ function sendFileMessage(recipientId) {
  * Send a text message using the Send API.
  *
  */
-function sendTextMessage(recipientId, messageText, context = null) {
+function sendTextMessage(recipientId, messageText, context = '') {
   var messageData = {
     recipient: {
       id: recipientId
