@@ -46,6 +46,7 @@ app.set('view engine', 'ejs');
 
 
 app.get('/webhook', function(req, res) {
+  logger.log('yoo11');
   if (req.query['hub.mode'] === 'subscribe' &&
       req.query['hub.verify_token'] === 'gota-fb-bot') {
     logger.log("Validating webhook");
@@ -68,6 +69,7 @@ app.get('/webhook', function(req, res) {
  *
  */
 app.post('/webhook', function (req, res) {
+  logger.log('yoo22');
   var data = req.body;
   logger.log(data.object);
   // Make sure this is a page subscription
