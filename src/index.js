@@ -106,7 +106,8 @@ app.post('/webhook', function (req, res) {
 
 
 function sendMessageToWatsonAndGetResponseText(message_text) {
-
+  var text_from_watson = 'fail to get reply.';
+  //logger.log('Message from user: '.message_text);
   conversation.message({
     input: { text: message_text },
     context: watson_resp == null ? null : watson_resp.context,
@@ -125,8 +126,9 @@ function sendMessageToWatsonAndGetResponseText(message_text) {
 
     // Prompt for the next round of input.
     //say(viber_resp, response.output.text[0]);
-    return response.output.text[0];
+    text_from_watson = response.output.text[0];
   });
+  return text_from_watson;
 }
 
 
