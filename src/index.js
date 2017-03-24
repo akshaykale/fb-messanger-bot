@@ -105,7 +105,7 @@ app.post('/webhook', function (req, res) {
 });
 
 
-function sendMessageToWatsonAndGetResponseText(senderID, message_text) {
+function sendMessageToWatsonAndGetResponseText(message_text) {
   var text_from_watson = 'fail to get reply.';
   logger.log('########Message from user: '.message_text);
   conversation.message({
@@ -215,12 +215,12 @@ function receivedMessage(event) {
   }*/
 
   if (messageText) {
-    var respFromWatson = sendMessageToWatsonAndGetResponseText(senderID, messageText);
+    //var respFromWatson = sendMessageToWatsonAndGetResponseText(senderID, messageText);
     
     // If we receive a text message, check to see if it matches any special
     // keywords and send back the corresponding example. Otherwise, just echo
     // the text we received.
-    /*switch (messageText) {
+    switch (messageText) {
       case 'image':
         sendImageMessage(senderID);
         break;
@@ -275,7 +275,7 @@ function receivedMessage(event) {
 
       default:
         sendTextMessage(senderID, messageText);
-    }*/
+    }
   } else if (messageAttachments) {
     sendTextMessage(senderID, "Message with attachment received");
   }
