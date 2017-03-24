@@ -220,6 +220,8 @@ function receivedMessage(event) {
     // If we receive a text message, check to see if it matches any special
     // keywords and send back the corresponding example. Otherwise, just echo
     // the text we received.
+    logger.log('#######msg'.messageText);
+
     switch (messageText) {
       case 'image':
         sendImageMessage(senderID);
@@ -273,8 +275,35 @@ function receivedMessage(event) {
         sendAccountLinking(senderID);
         break;
 
-      default:
+      default: {
+
+        conversation.message({
+          input: { text: messageText },
+          context: watson_resp == null ? null : watson_resp.context,
+        }, (err, response) => {
+          if (err) {
+            logger.error('Error in watson response: '.err); // something went wrong
+            return;
+          }
+          watson_resp = response;
+
+          //logger.log(JSON.stringify(response.context, null, 2));
+          // Display the output from dialog, if any.
+          if (response.output.text.length != 0) {
+            logger.log(response.output.text[0]);
+          }
+
+          // Prompt for the next round of input.
+          //say(viber_resp, response.output.text[0]);
+          logger.log('yuyu: '.response.output.text[0])
+          messageText = response.output.text[0];
+
+          //sendTextMessage(senderID, respFromWatson);
+
+        });
+
         sendTextMessage(senderID, messageText);
+      }
     }
   } else if (messageAttachments) {
     sendTextMessage(senderID, "Message with attachment received");
