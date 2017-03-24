@@ -190,10 +190,10 @@ function receivedMessage(event) {
     senderID, recipientID, timeOfMessage);
   logger.log(JSON.stringify(message));
 
-  var isEcho = message.is_echo;
-  var messageId = message.mid;
-  var appId = message.app_id;
-  var metadata = message.metadata;
+  //var isEcho = message.is_echo;
+  //var messageId = message.mid;
+  //var appId = message.app_id;
+  //var metadata = message.metadata;
 
   // You may get a text or attachment but not both
   var messageText = message.text;
