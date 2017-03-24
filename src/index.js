@@ -27,7 +27,7 @@ const SERVER_URL = process.env.SERVER_URL;
 if (!(APP_SECRET && VALIDATION_TOKEN && PAGE_ACCESS_TOKEN && SERVER_URL)) {
   logger.error("Missing config values");
   process.exit(1);
-}s
+}
 
 //app values
 app.set('port', process.env.PORT || 5000);
