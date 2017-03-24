@@ -797,7 +797,7 @@ function verifyRequestSignature(req, res, buf) {
     }
   }
 }
-
+logger.log('test');
 
 // Start server
 // Webhooks must be available via SSL with a certificate signed by a valid 
