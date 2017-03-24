@@ -289,6 +289,7 @@ function receivedMessage(event) {
             return;
           }
           watson_resp = response;
+          logger.log('#### Context: '+JSON.stringify(watson_resp.context));
 
           //logger.log(JSON.stringify(response.context, null, 2));
           // Display the output from dialog, if any.
