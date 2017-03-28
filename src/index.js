@@ -117,6 +117,9 @@ function replyByWatson(senderID, messageText) {
       logger.log(response.output.text[0]);
       sendTextMessage(senderID, response.output.text[0]);
     }
+    //End of conversation Call the required API to give user response
+    logger.log(JSON.stringify(response));
+
   });
 }
 
