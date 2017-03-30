@@ -5,7 +5,9 @@
 > Install the dependencies: `npm install`<br>
 > Deploy to heroku, follow this guide (https://devcenter.heroku.com/articles/getting-started-with-nodejs#introduction)<br>
 <br>
-### You need some environment variables to be configured on heroku in settings tab.<br>
+### Configs
+You need some environment variables to be configured on heroku in settings tab.<br>
+
    `MESSENGER_APP_SECRET`            : Get it from FB app dashboard<br>
    `MESSENGER_PAGE_ACCESS_TOKEN`     : Get it from FB app/page dashboard<br>
    `MMESSENGER_VALIDATION_TOKEN`     : Get it from FB app dashboard<br>
