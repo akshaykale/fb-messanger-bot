@@ -138,7 +138,7 @@ function replyByWatson(senderID, messageText) {
           // parsed response body as js object 
           logger.log(data);
           // raw response 
-          logger.log(response);
+          //logger.log(response);
 
           sendGenericMessage(senderID, data);
       });
@@ -649,6 +649,8 @@ function sendGenericMessage(recipientId, data) {
       }
     }
   };
+
+  console.log("MESSAGE DATA++>>  "+JSON.stringify(messageData));
 
   callSendAPI(messageData);
 }
