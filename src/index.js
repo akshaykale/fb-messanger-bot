@@ -122,14 +122,14 @@ function replyByWatson(senderID, messageText) {
     if(response.output.nodes_visited[0]=='golf_search_request_confirmed'){
       // set content-type header and data as json in args parameter 
       var args = {
-        param: {
+        data:{param: {
           "app_id": process.env.R_APP_ID,
           "app_secret": process.env.R_APP_SECRET,
           "place": response.context.place,
           "date": response.context.date,
           "category":response.context.category
-        },
-        headers: { "Content-Type": "application/x-www-form-urlencoded" }
+        }},
+        headers: { "Content-Type": "application/json" }
       };
 
       logger.log("OBJ--> "+JSON.stringify(args));
