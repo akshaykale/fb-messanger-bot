@@ -700,7 +700,7 @@ function sendGenericMessage_Ichiba(recipientId, data) {
             image_url: data[0].picture[0],
             buttons: [{
               type: "web_url",
-              url: data[0].book_url,
+              url: data[0].item_url,
               title: "Buy"
             }, {
               type: "web_url",
@@ -714,7 +714,7 @@ function sendGenericMessage_Ichiba(recipientId, data) {
             image_url: data[1].picture[0],
             buttons: [{
               type: "web_url",
-              url: data[1].book_url,
+              url: data[1].item_url,
               title: "Buy"
             }, {
               type: "web_url",
@@ -729,7 +729,7 @@ function sendGenericMessage_Ichiba(recipientId, data) {
             image_url: data[2].picture[0],
             buttons: [{
               type: "web_url",
-              url: data[2].book_url,
+              url: data[2].item_url,
               title: "Buy"
             }, {
               type: "web_url",
@@ -744,7 +744,7 @@ function sendGenericMessage_Ichiba(recipientId, data) {
             image_url: data[3].picture[0],
             buttons: [{
               type: "web_url",
-              url: data[3].book_url,
+              url: data[3].item_url,
               title: "Buy"
             }, {
               type: "web_url",
@@ -759,7 +759,7 @@ function sendGenericMessage_Ichiba(recipientId, data) {
             image_url: data[4].picture[0],
             buttons: [{
               type: "web_url",
-              url: data[4].book_url,
+              url: data[4].item_url,
               title: "Buy"
             }, {
               type: "web_url",
