@@ -141,9 +141,36 @@ function replyByWatson(senderID, messageText) {
           //logger.log(response);
 
           sendGenericMessage(senderID, data);
+
       });
 
-  }else if (response.output.text.length != 0) {
+  }else if(response.output.nodes_visited[0]=='item_search_request_confirmed' || response.output.nodes_visited[0]=='item_search_request_confirmed_'){
+      // set content-type header and data as json in args parameter 
+
+      var _args = {
+        data:{param: {
+          "keyword": response.context.item,
+          "app_id": process.env.R_APP_ID,"app_secret": process.env.R_APP_SECRET,
+          "sex": response.context.gender
+        }},
+        headers: { "Content-Type": "application/json" }
+      };
+
+      logger.log("OBJ--> "+JSON.stringify(_args));
+
+      restClient.post("https://akshay-api.herokuapp.com/gora/ichibaitem", _args, function (data, response) {
+          // parsed response body as js object 
+          logger.log(data);
+          // raw response 
+          //logger.log(response);
+
+          sendGenericMessage_Ichiba(senderID, data);
+
+      });
+
+  }
+  
+  else if (response.output.text.length != 0) {
       logger.log(response.output.text[0]);
       sendTextMessage(senderID, response.output.text[0]);
     }
@@ -654,6 +681,103 @@ function sendGenericMessage(recipientId, data) {
 
   callSendAPI(messageData);
 }
+
+//for ichiba
+function sendGenericMessage_Ichiba(recipientId, data) {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "generic",
+          elements: [{
+            title: data[0].name,
+            subtitle: data[0].desc,
+            item_url: data[0].item_url,
+            image_url: data[0].picture[0],
+            buttons: [{
+              type: "web_url",
+              url: data[0].book_url,
+              title: "Buy"
+            }, {
+              type: "web_url",
+              title: "Show website",
+              url: data[0].shop_url,
+            }],
+          }, {
+            title: data[1].name,
+            subtitle: data[1].desc,
+            item_url: data[1].item_url,
+            image_url: data[1].picture[0],
+            buttons: [{
+              type: "web_url",
+              url: data[1].book_url,
+              title: "Buy"
+            }, {
+              type: "web_url",
+              title: "Show website",
+              url: data[1].shop_url,
+            }],
+          },
+          {
+            title: data[2].name,
+            subtitle: data[2].desc,
+            item_url: data[2].item_url,
+            image_url: data[2].picture[0],
+            buttons: [{
+              type: "web_url",
+              url: data[2].book_url,
+              title: "Buy"
+            }, {
+              type: "web_url",
+              title: "Show website",
+              url: data[2].shop_url,
+            }],
+          },
+          {
+            title: data[3].name,
+            subtitle: data[3].desc,
+            item_url: data[3].item_url,
+            image_url: data[3].picture[0],
+            buttons: [{
+              type: "web_url",
+              url: data[3].book_url,
+              title: "Buy"
+            }, {
+              type: "web_url",
+              title: "Show website",
+              url: data[3].shop_url,
+            }],
+          },
+          {
+            title: data[4].name,
+            subtitle: data[4].desc,
+            item_url: data[4].item_url,
+            image_url: data[4].picture[0],
+            buttons: [{
+              type: "web_url",
+              url: data[4].book_url,
+              title: "Buy"
+            }, {
+              type: "web_url",
+              title: "Show website",
+              url: data[4].shop_url,
+            }],
+          }]
+        }
+      }
+    }
+  };
+
+  console.log("MESSAGE DATA++>>  "+JSON.stringify(messageData));
+
+  callSendAPI(messageData);
+}
+
+
 
 /*
  * Send a receipt message using the Send API.
