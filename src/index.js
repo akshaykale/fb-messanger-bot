@@ -9,6 +9,9 @@ const
   request = require('request');
 var ConversationV1 = require('watson-developer-cloud/conversation/v1');
 
+var RestClient = require('node-rest-client').Client;
+      var restClient = new RestClient();
+
 var app = express();
 
 /*Conversation object*/
@@ -113,13 +116,37 @@ function replyByWatson(senderID, messageText) {
       logger.error('Error in watson response: ' + err); // something went wrong
     }
     watson_context = response.context;
-    if (response.output.text.length != 0) {
+    
+    //End of conversation Call the required API to give user response
+    logger.log("RESPONSE FROM WATSON" + JSON.stringify(response));
+    if(response.output.nodes_visited[0]=='golf_search_request_confirmed'){
+      // set content-type header and data as json in args parameter 
+      var args = {
+        param: {
+          "app_id": process.env.R_APP_ID,
+          "app_secret": process.env.R_APP_SECRET,
+          "place": response.context.place,
+          "date": response.context.date,
+          "category":response.context.category
+        },
+        headers: { "Content-Type": "application/x-www-form-urlencoded" }
+      };
+
+      logger.log("OBJ--> "+JSON.stringify(args));
+
+      restClient.post("https://akshay-api.herokuapp.com/gora/golfcourse", args, function (data, response) {
+          // parsed response body as js object 
+          logger.log(data);
+          // raw response 
+          logger.log(response);
+
+          sendGenericMessage(senderID, data);
+      });
+
+  }else if (response.output.text.length != 0) {
       logger.log(response.output.text[0]);
       sendTextMessage(senderID, response.output.text[0]);
     }
-    //End of conversation Call the required API to give user response
-    logger.log(JSON.stringify(response));
-
   });
 }
 
@@ -534,7 +561,7 @@ function sendButtonMessage(recipientId) {
  * Send a Structured Message (Generic Message type) using the Send API.
  *
  */
-function sendGenericMessage(recipientId) {
+function sendGenericMessage(recipientId, data) {
   var messageData = {
     recipient: {
       id: recipientId
@@ -545,33 +572,78 @@ function sendGenericMessage(recipientId) {
         payload: {
           template_type: "generic",
           elements: [{
-            title: "rift",
-            subtitle: "Next-generation virtual reality",
-            item_url: "https://www.oculus.com/en-us/rift/",
-            image_url: SERVER_URL + "/assets/rift.png",
+            title: data[0].name,
+            subtitle: data[0].desc,
+            item_url: data[0].book_url,
+            image_url: data[0].picture,
             buttons: [{
               type: "web_url",
-              url: "https://www.oculus.com/en-us/rift/",
-              title: "Open Web URL"
+              url: data[0].book_url,
+              title: "Book"
             }, {
-              type: "postback",
-              title: "Call Postback",
-              payload: "Payload for first bubble",
+              type: "web_url",
+              title: "Reviews",
+              url: data[0].reviews,
             }],
           }, {
-            title: "touch",
-            subtitle: "Your Hands, Now in VR",
-            item_url: "https://www.oculus.com/en-us/touch/",
-            image_url: SERVER_URL + "/assets/touch.png",
+            title: data[1].name,
+            subtitle: data[1].desc,
+            item_url: data[1].book_url,
+            image_url: data[1].picture,
             buttons: [{
               type: "web_url",
-              url: "https://www.oculus.com/en-us/touch/",
-              title: "Open Web URL"
+              url: data[1].book_url,
+              title: "Book"
             }, {
-              type: "postback",
-              title: "Call Postback",
-              payload: "Payload for second bubble",
-            }]
+              type: "web_url",
+              title: "Reviews",
+              url: data[1].reviews,
+            }],
+          },
+          {
+            title: data[2].name,
+            subtitle: data[2].desc,
+            item_url: data[2].book_url,
+            image_url: data[2].picture,
+            buttons: [{
+              type: "web_url",
+              url: data[2].book_url,
+              title: "Book"
+            }, {
+              type: "web_url",
+              title: "Reviews",
+              url: data[2].reviews,
+            }],
+          },
+          {
+            title: data[3].name,
+            subtitle: data[3].desc,
+            item_url: data[3].book_url,
+            image_url: data[3].picture,
+            buttons: [{
+              type: "web_url",
+              url: data[3].book_url,
+              title: "Book"
+            }, {
+              type: "web_url",
+              title: "Reviews",
+              url: data[3].reviews,
+            }],
+          },
+          {
+            title: data[4].name,
+            subtitle: data[4].desc,
+            item_url: data[4].book_url,
+            image_url: data[4].picture,
+            buttons: [{
+              type: "web_url",
+              url: data[4].book_url,
+              title: "Book"
+            }, {
+              type: "web_url",
+              title: "Reviews",
+              url: data[4].reviews,
+            }],
           }]
         }
       }
