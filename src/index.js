@@ -603,6 +603,7 @@ function sendGenericMessage(recipientId, data) {
       }
       buttons_all.push(buttons);
   }
+  logger.log(JSON.stringify(buttons_all));
   
   var messageData = {
     recipient: {
