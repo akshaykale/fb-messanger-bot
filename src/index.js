@@ -593,7 +593,7 @@ function sendGenericMessage(recipientId, data) {
   for(var i=0;i<data.length;i++){
       var plans = data[i].plan;
       var buttons = [];
-      for (var j=0;j<1;j++){
+      for (var j=0;j<Math.min(plans.length, 3);j++){
           var bt = {
             type: "web_url",
             url: plans[j].url,
