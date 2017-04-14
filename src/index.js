@@ -589,22 +589,6 @@ function sendButtonMessage(recipientId) {
  *
  */
 function sendGenericMessage(recipientId, data) {
-  var buttons_all=[];
-  for(var i=0;i<data.length;i++){
-      var plans = data[i].plan;
-      var buttons = [];
-      for (var j=0;j<Math.min(plans.length, 3);j++){
-          var bt = {
-            type: "web_url",
-            url: plans[j].url,
-            title: plans[j].planName
-          }
-          buttons.push(bt);
-      }
-      buttons_all.push(buttons);
-  }
-  logger.log(JSON.stringify(buttons_all));
-  
   var messageData = {
     recipient: {
       id: recipientId
@@ -617,42 +601,81 @@ function sendGenericMessage(recipientId, data) {
           elements: [{
             title: data[0].name,
             subtitle: data[0].desc,
-            //item_url: data[0].book_url,
+            item_url: data[0].book_url,
             image_url: data[0].picture,
-            buttons: buttons_all[0],
+            buttons: [{
+              type: "web_url",
+              url: data[0].book_url,
+              title: "Book"
+            }, {
+              type: "web_url",
+              title: "Reviews",
+              url: data[0].reviews,
+            }],
           }, {
             title: data[1].name,
             subtitle: data[1].desc,
             item_url: data[1].book_url,
             image_url: data[1].picture,
-            buttons: buttons_all[1],
+            buttons: [{
+              type: "web_url",
+              url: data[1].book_url,
+              title: "Book"
+            }, {
+              type: "web_url",
+              title: "Reviews",
+              url: data[1].reviews,
+            }],
           },
           {
             title: data[2].name,
             subtitle: data[2].desc,
             item_url: data[2].book_url,
             image_url: data[2].picture,
-            buttons: buttons_all[2],
+            buttons: [{
+              type: "web_url",
+              url: data[2].book_url,
+              title: "Book"
+            }, {
+              type: "web_url",
+              title: "Reviews",
+              url: data[2].reviews,
+            }],
           },
           {
             title: data[3].name,
             subtitle: data[3].desc,
             item_url: data[3].book_url,
             image_url: data[3].picture,
-            buttons: buttons_all[3],
+            buttons: [{
+              type: "web_url",
+              url: data[3].book_url,
+              title: "Book"
+            }, {
+              type: "web_url",
+              title: "Reviews",
+              url: data[3].reviews,
+            }],
           },
           {
             title: data[4].name,
             subtitle: data[4].desc,
             item_url: data[4].book_url,
             image_url: data[4].picture,
-            buttons: buttons_all[4],
+            buttons: [{
+              type: "web_url",
+              url: data[4].book_url,
+              title: "Book"
+            }, {
+              type: "web_url",
+              title: "Reviews",
+              url: data[4].reviews,
+            }],
           }]
         }
       }
     }
   };
-
   console.log("MESSAGE DATA++>>  "+JSON.stringify(messageData));
 
   callSendAPI(messageData);
