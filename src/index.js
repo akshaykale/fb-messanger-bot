@@ -134,7 +134,7 @@ function replyByWatson(senderID, messageText) {
 
       logger.log("OBJ--> "+JSON.stringify(args));
 
-      restClient.get("https://akshay-api.herokuapp.com/gora/golfplan?place="+response.context.place+"&date="+response.context.date, function (data, response) {
+      restClient.get("https://akshay-api.herokuapp.com/gora/golfcourse?place="+response.context.place+"&date="+response.context.date, function (data, response) {
           // parsed response body as js object 
           logger.log(data);
           // raw response 
