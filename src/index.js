@@ -590,10 +590,10 @@ function sendButtonMessage(recipientId) {
  */
 function sendGenericMessage(recipientId, data) {
   var buttons_all=[];
-  for( i=0;i<data.length;i++){
+  for(var i=0;i<data.length;i++){
       var plans = data[i].plan;
       var buttons = [];
-      for (j=0;j<plans.length;j++){
+      for (var j=0;j<plans.length;j++){
           var bt = {
             type: "web_url",
             url: plans[j].url,
