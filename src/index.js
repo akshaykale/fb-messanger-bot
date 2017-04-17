@@ -581,6 +581,12 @@ function sendButtonMessage(recipientId) {
  * Send a Structured Message (Generic Message type) using the Send API.
  *
  * http://maps.google.com/?q=36.50,139.70
+ * 
+ *          {
+              type: "web_url",
+              title: "Show on map",
+              url: "http://maps.google.com/?q="+data[0].location.lat+","+data[0].location.lng
+            }
  */
 function sendGenericMessage(recipientId, data) {
   var messageData = {
@@ -609,10 +615,6 @@ function sendGenericMessage(recipientId, data) {
               type: "postback",
               title: "Find hotels",
               payload: JSON.stringify(data[0].location)
-            },{
-              type: "web_url",
-              title: "Show on map",
-              url: "http://maps.google.com/?q="+data[0].location.lat+","+data[0].location.lng
             }],
           }, {
             title: data[1].name,
@@ -631,10 +633,6 @@ function sendGenericMessage(recipientId, data) {
               type: "postback",
               title: "Find hotels",
               payload: JSON.stringify(data[1].location)
-            },{
-              type: "web_url",
-              title: "Show on map",
-              url: "http://maps.google.com/?q="+data[1].location.lat+","+data[1].location.lng
             }],
           },
           {
@@ -654,10 +652,6 @@ function sendGenericMessage(recipientId, data) {
               type: "postback",
               title: "Find hotels",
               payload: JSON.stringify(data[2].location)
-            },{
-              type: "web_url",
-              title: "Show on map",
-              url: "http://maps.google.com/?q="+data[2].location.lat+","+data[2].location.lng
             }],
           },
           {
@@ -677,10 +671,6 @@ function sendGenericMessage(recipientId, data) {
               type: "postback",
               title: "Find hotels",
               payload: JSON.stringify(data[3].location)
-            },{
-              type: "web_url",
-              title: "Show on map",
-              url: "http://maps.google.com/?q="+data[3].location.lat+","+data[3].location.lng
             }],
           },
           {
@@ -700,10 +690,6 @@ function sendGenericMessage(recipientId, data) {
               type: "postback",
               title: "Find hotels",
               payload: JSON.stringify(data[4].location)
-            },{
-              type: "web_url",
-              title: "Show on map",
-              url: "http://maps.google.com/?q="+data[4].location.lat+","+data[4].location.lng
             }],
           }]
         }
