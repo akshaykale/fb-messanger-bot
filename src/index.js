@@ -695,6 +695,7 @@ function sendGenericMessage(recipientId, data) {
 
 //for hotels
 function sendGenericMessage_Hotels(recipientId, data) {
+
   var messageData = {
     recipient: {
       id: recipientId
@@ -704,85 +705,30 @@ function sendGenericMessage_Hotels(recipientId, data) {
         type: "template",
         payload: {
           template_type: "generic",
-          elements: [{
-            title: data[0].name,
-            subtitle: "Minimum price: "+data[0].price+"\nRating: "+data[0].rating,
-            item_url: data[0].book_url,
-            image_url: data[0].picture,
-            buttons: [{
-              type: "web_url",
-              url: data[0].book_url,
-              title: "Booking details"
-            }, {
-              type: "web_url",
-              title: "Reviews",
-              url: data[0].reviews,
-            }],
-          }, {
-            title: data[1].name,
-            subtitle: "Minimum price: "+data[1].price+"\nRating: "+data[1].rating,
-            item_url: data[1].book_url,
-            image_url: data[1].picture,
-            buttons: [{
-              type: "web_url",
-              url: data[1].book_url,
-              title: "Booking details"
-            }, {
-              type: "web_url",
-              title: "Reviews",
-              url: data[1].reviews,
-            }],
-          },
-          {
-            title: data[2].name,
-            subtitle: "Minimum price: "+data[2].price+"\nRating: "+data[2].rating,
-            item_url: data[2].book_url,
-            image_url: data[2].picture,
-            buttons: [{
-              type: "web_url",
-              url: data[2].book_url,
-              title: "Booking details"
-            }, {
-              type: "web_url",
-              title: "Reviews",
-              url: data[2].reviews,
-            }],
-          },
-          {
-            title: data[3].name,
-            subtitle: "Minimum price: "+data[3].price+"\nRating: "+data[3].rating,
-            item_url: data[3].book_url,
-            image_url: data[3].picture,
-            buttons: [{
-              type: "web_url",
-              url: data[3].book_url,
-              title: "Booking details"
-            }, {
-              type: "web_url",
-              title: "Reviews",
-              url: data[3].reviews,
-            }],
-          },
-          {
-            title: data[4].name,
-            subtitle: "Minimum price: "+data[4].price+"\nRating: "+data[4].rating,
-            item_url: data[4].book_url,
-            image_url: data[4].picture,
-            buttons: [{
-              type: "web_url",
-              url: data[4].book_url,
-              title: "Booking details"
-            }, {
-              type: "web_url",
-              title: "Reviews",
-              url: data[4].reviews,
-            }],
-          }]
+          elements: []
         }
       }
     }
   };
 
+    for (var i=0;i<data.length;i++){
+    var card = {
+            title: data[i].name,
+            subtitle: "Minimum price: "+data[i].price+"\nRating: "+data[i].rating,
+            item_url: data[i].book_url,
+            image_url: data[i].picture,
+            buttons: [{
+              type: "web_url",
+              url: data[i].book_url,
+              title: "Booking details"
+            }, {
+              type: "web_url",
+              title: "Reviews",
+              url: data[i].reviews,
+            }]
+          };
+          messageData.message.attachment.payload.elements.push(card);
+  }
   console.log("MESSAGE DATA++>>  "+JSON.stringify(messageData));
 
   callSendAPI(messageData);
