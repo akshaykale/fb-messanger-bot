@@ -158,7 +158,7 @@ function replyByWatson(senderID, messageText) {
 
       logger.log("OBJ--> "+JSON.stringify(_args));
 
-      restClient.post("https://akshay-api.herokuapp.com/gora/ichibaitem", _args, function (data, response) {
+      restClient.get("https://akshay-api.herokuapp.com/gora/ichibaitem?keyword="+response.context.keyword+"&gender="+response.context.gender, function (data, response) {
           // parsed response body as js object 
           logger.log(data);
           // raw response 
