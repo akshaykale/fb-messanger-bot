@@ -343,7 +343,8 @@ function receivedPostback(event) {
   // The 'payload' param is a developer-defined field which is set in a postback 
   // button for Structured Messages. 
   var payload = event.postback.payload;
-
+  payload = JSON.parse(payload);
+  logger.log("PAYLOAD=> "+JSON.stringify(payload));
   console.log("Received postback for user %d and page %d with payload '%s' " +
     "at %d", senderID, recipientID, payload, timeOfPostback);
 
@@ -601,7 +602,7 @@ function sendGenericMessage(recipientId, data) {
             },{
               type: "postback",
               title: "Find hotels",
-              payload: data[0].location
+              payload: JSON.stringify(data[0].location)
             }],
           }, {
             title: data[1].name,
@@ -619,7 +620,7 @@ function sendGenericMessage(recipientId, data) {
             },{
               type: "postback",
               title: "Find hotels",
-              payload: data[1].location
+              payload: JSON.stringify(data[1].location)
             }],
           },
           {
@@ -638,7 +639,7 @@ function sendGenericMessage(recipientId, data) {
             },{
               type: "postback",
               title: "Find hotels",
-              payload: data[2].location
+              payload: JSON.stringify(data[2].location)
             }],
           },
           {
@@ -657,7 +658,7 @@ function sendGenericMessage(recipientId, data) {
             },{
               type: "postback",
               title: "Find hotels",
-              payload: data[3].location
+              payload: JSON.stringify(data[3].location)
             }],
           },
           {
@@ -676,7 +677,7 @@ function sendGenericMessage(recipientId, data) {
             },{
               type: "postback",
               title: "Find hotels",
-              payload: data[4].location
+              payload: JSON.stringify(data[4].location)
             }],
           }]
         }
