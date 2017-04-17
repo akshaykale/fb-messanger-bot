@@ -712,10 +712,10 @@ function sendGenericMessage_Hotels(recipientId, data) {
             buttons: [{
               type: "web_url",
               url: data[0].book_url,
-              title: "Buy"
+              title: "Booking details"
             }, {
               type: "web_url",
-              title: "Show website",
+              title: "Reviews",
               url: data[0].reviews,
             }],
           }, {
@@ -726,10 +726,10 @@ function sendGenericMessage_Hotels(recipientId, data) {
             buttons: [{
               type: "web_url",
               url: data[1].book_url,
-              title: "Buy"
+              title: "Booking details"
             }, {
               type: "web_url",
-              title: "Show website",
+              title: "Reviews",
               url: data[1].reviews,
             }],
           },
@@ -741,10 +741,10 @@ function sendGenericMessage_Hotels(recipientId, data) {
             buttons: [{
               type: "web_url",
               url: data[2].book_url,
-              title: "Buy"
+              title: "Booking details"
             }, {
               type: "web_url",
-              title: "Show website",
+              title: "Reviews",
               url: data[2].reviews,
             }],
           },
@@ -756,10 +756,10 @@ function sendGenericMessage_Hotels(recipientId, data) {
             buttons: [{
               type: "web_url",
               url: data[3].book_url,
-              title: "Buy"
+              title: "Booking details"
             }, {
               type: "web_url",
-              title: "Show website",
+              title: "Reviews",
               url: data[3].reviews,
             }],
           },
@@ -771,10 +771,10 @@ function sendGenericMessage_Hotels(recipientId, data) {
             buttons: [{
               type: "web_url",
               url: data[4].book_url,
-              title: "Buy"
+              title: "Booking details"
             }, {
               type: "web_url",
-              title: "Show website",
+              title: "Reviews",
               url: data[4].reviews,
             }],
           }]
