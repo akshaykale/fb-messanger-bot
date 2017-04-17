@@ -120,20 +120,6 @@ function replyByWatson(senderID, messageText) {
     //End of conversation Call the required API to give user response
     logger.log("RESPONSE FROM WATSON" + JSON.stringify(response));
     if(response.output.nodes_visited[0]=='golf_search_request_confirmed'){
-      // set content-type header and data as json in args parameter 
-      var args = {
-        data:{param: {
-          "app_id": process.env.R_APP_ID,
-          "app_secret": process.env.R_APP_SECRET,
-          "place": response.context.place,
-          "date": response.context.date,
-          "category":response.context.category
-        }},
-        headers: { "Content-Type": "application/json" }
-      };
-
-      logger.log("OBJ--> "+JSON.stringify(args));
-
       restClient.get("https://akshay-api.herokuapp.com/gora/golfcourse?place="+response.context.place+"&date="+response.context.date, function (data, response) {
           // parsed response body as js object 
           logger.log(data);
@@ -141,31 +127,15 @@ function replyByWatson(senderID, messageText) {
           //logger.log(response);
 
           sendGenericMessage(senderID, data);
-
       });
 
   }else if(response.output.nodes_visited[0]=='item_search_request_confirmed' || response.output.nodes_visited[0]=='item_search_request_confirmed_'){
-      // set content-type header and data as json in args parameter 
-
-      var _args = {
-        data:{param: {
-          "keyword": response.context.item,
-          "app_id": process.env.R_APP_ID,"app_secret": process.env.R_APP_SECRET,
-          "sex": response.context.gender
-        }},
-        headers: { "Content-Type": "application/json" }
-      };
-
-      logger.log("OBJ--> "+JSON.stringify(_args));
-
       restClient.get("https://akshay-api.herokuapp.com/gora/ichibaitem?keyword="+response.context.item+"&gender="+response.context.gender, function (data, response) {
           // parsed response body as js object 
           logger.log(data);
           // raw response 
           //logger.log(response);
-
           sendGenericMessage_Ichiba(senderID, data);
-
       });
 
   }
@@ -379,7 +349,24 @@ function receivedPostback(event) {
 
   // When a postback is called, we'll send a message back to the sender to 
   // let them know it was successful
-  sendTextMessage(senderID, "Postback called");
+
+  var checkin = watson_context.date;
+  var chch = checkin.substring(0,8);
+  logger.log("CHCH=>  "+chch);
+  var summ = (int)(checkin.substring(8,9)) + 1;
+  logger.log("SUMM=>  "+summ);
+  var checkout =   chch+summ;
+
+  var url_hotels = "https://akshay-api.herokuapp.com/gora/hotels?cin="+checkin+"&cout="+checkout+"&lat="+payload.lat+"&lng="+payload.lng;
+  logger.log("HOTEL_URL=> "+url_hotels);
+  restClient.get(url_hotels, function (data, response) {
+          // parsed response body as js object 
+          logger.log(data);
+          // raw response 
+          //logger.log(response);
+
+          sendGenericMessage_Hotels(senderID,data);
+      });
 }
 
 /*
@@ -611,6 +598,10 @@ function sendGenericMessage(recipientId, data) {
               type: "web_url",
               title: "Reviews",
               url: data[0].reviews,
+            },{
+              type: "postback",
+              title: "Find hotels",
+              payload: data[0].location
             }],
           }, {
             title: data[1].name,
@@ -625,6 +616,10 @@ function sendGenericMessage(recipientId, data) {
               type: "web_url",
               title: "Reviews",
               url: data[1].reviews,
+            },{
+              type: "postback",
+              title: "Find hotels",
+              payload: data[1].location
             }],
           },
           {
@@ -640,6 +635,10 @@ function sendGenericMessage(recipientId, data) {
               type: "web_url",
               title: "Reviews",
               url: data[2].reviews,
+            },{
+              type: "postback",
+              title: "Find hotels",
+              payload: data[2].location
             }],
           },
           {
@@ -655,6 +654,10 @@ function sendGenericMessage(recipientId, data) {
               type: "web_url",
               title: "Reviews",
               url: data[3].reviews,
+            },{
+              type: "postback",
+              title: "Find hotels",
+              payload: data[3].location
             }],
           },
           {
@@ -670,6 +673,10 @@ function sendGenericMessage(recipientId, data) {
               type: "web_url",
               title: "Reviews",
               url: data[4].reviews,
+            },{
+              type: "postback",
+              title: "Find hotels",
+              payload: data[4].location
             }],
           }]
         }
@@ -680,6 +687,103 @@ function sendGenericMessage(recipientId, data) {
 
   callSendAPI(messageData);
 }
+
+
+//for hotels
+function sendGenericMessage_Hotels(recipientId, data) {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "generic",
+          elements: [{
+            title: data[0].name,
+            subtitle: "Minimum price: "+data[0].price+"\nRating: "+data[0].rating,
+            item_url: data[0].book_url,
+            image_url: data[0].picture,
+            buttons: [{
+              type: "web_url",
+              url: data[0].book_url,
+              title: "Buy"
+            }, {
+              type: "web_url",
+              title: "Show website",
+              url: data[0].reviews,
+            }],
+          }, {
+            title: data[1].name,
+            subtitle: "Minimum price: "+data[1].price+"\nRating: "+data[1].rating,
+            item_url: data[1].book_url,
+            image_url: data[1].picture,
+            buttons: [{
+              type: "web_url",
+              url: data[1].book_url,
+              title: "Buy"
+            }, {
+              type: "web_url",
+              title: "Show website",
+              url: data[1].reviews,
+            }],
+          },
+          {
+            title: data[2].name,
+            subtitle: "Minimum price: "+data[2].price+"\nRating: "+data[2].rating,
+            item_url: data[2].book_url,
+            image_url: data[2].picture,
+            buttons: [{
+              type: "web_url",
+              url: data[2].book_url,
+              title: "Buy"
+            }, {
+              type: "web_url",
+              title: "Show website",
+              url: data[2].reviews,
+            }],
+          },
+          {
+            title: data[3].name,
+            subtitle: "Minimum price: "+data[3].price+"\nRating: "+data[3].rating,
+            item_url: data[3].book_url,
+            image_url: data[3].picture,
+            buttons: [{
+              type: "web_url",
+              url: data[3].book_url,
+              title: "Buy"
+            }, {
+              type: "web_url",
+              title: "Show website",
+              url: data[3].reviews,
+            }],
+          },
+          {
+            title: data[4].name,
+            subtitle: "Minimum price: "+data[4].price+"\nRating: "+data[4].rating,
+            item_url: data[4].book_url,
+            image_url: data[4].picture,
+            buttons: [{
+              type: "web_url",
+              url: data[4].book_url,
+              title: "Buy"
+            }, {
+              type: "web_url",
+              title: "Show website",
+              url: data[4].reviews,
+            }],
+          }]
+        }
+      }
+    }
+  };
+
+  console.log("MESSAGE DATA++>>  "+JSON.stringify(messageData));
+
+  callSendAPI(messageData);
+}
+
 
 //for ichiba
 function sendGenericMessage_Ichiba(recipientId, data) {
