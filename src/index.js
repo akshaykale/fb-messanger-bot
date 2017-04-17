@@ -354,9 +354,12 @@ function receivedPostback(event) {
   var checkin = watson_context.date;
   var chch = checkin.substring(0,8);
   logger.log("CHCH=>  "+chch);
-  var summ = (int)(checkin.substring(8,9)) + 1;
+  var last2 = checkin.substring(8,10);
+  logger.log("LAST2=>  "+last2);
+  var summ = +last2 + 1;
   logger.log("SUMM=>  "+summ);
   var checkout =   chch+summ;
+  logger.log("CHECKOUT=>"+checkout)
 
   var url_hotels = "https://akshay-api.herokuapp.com/gora/hotels?cin="+checkin+"&cout="+checkout+"&lat="+payload.lat+"&lng="+payload.lng;
   logger.log("HOTEL_URL=> "+url_hotels);
