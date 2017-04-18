@@ -724,7 +724,7 @@ function sendGenericMessage_Hotels(recipientId, data) {
     }
   };
 
-    for (var i=0;i<data.length;i++){
+    for (var i=0;i<Math.min(data.length,5);i++){
     var card = {
             title: data[i].name,
             subtitle: "Minimum price: "+data[i].price+"\nRating: "+data[i].rating,
