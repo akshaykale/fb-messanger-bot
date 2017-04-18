@@ -350,26 +350,30 @@ function receivedPostback(event) {
 
   // When a postback is called, we'll send a message back to the sender to 
   // let them know it was successful
-
-  var checkin = watson_context.date;
-  var chch = checkin.substring(0,8);
-  logger.log("CHCH=>  "+chch);
-  var last2 = checkin.substring(8,10);
-  logger.log("LAST2=>  "+last2);
-  var summ = +last2 + 1;
-  logger.log("SUMM=>  "+summ);
-  var checkout =   chch+summ;
-  logger.log("CHECKOUT=>"+checkout)
-
+  var checkin = "2017-04-19";
+  var checkout = "2017-04-20";
+  if(watson_context){
+    checkin = watson_context.date;
+    var chch = checkin.substring(0,8);
+    var last2 = checkin.substring(8,10);
+    var summ = +last2 + 1;
+    checkout =   chch+summ;
+    logger.log("CHECKOUT=>"+checkout);
+  }
   var url_hotels = "https://akshay-api.herokuapp.com/gora/hotels?cin="+checkin+"&cout="+checkout+"&lat="+payload.lat+"&lng="+payload.lng;
   logger.log("HOTEL_URL=> "+url_hotels);
   restClient.get(url_hotels, function (data, response) {
           // parsed response body as js object 
           logger.log(data);
+
           // raw response 
           //logger.log(response);
-
-          sendGenericMessage_Hotels(senderID,data);
+          if(data.length <= 0){
+            sendTextMessage(senderID, "No hotels found within 2km radius");
+          }else {
+            sendGenericMessage_Hotels(senderID,data);
+          }
+            
       });
 }
 
